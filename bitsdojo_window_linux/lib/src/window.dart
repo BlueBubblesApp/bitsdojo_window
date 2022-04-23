@@ -1,5 +1,5 @@
 import 'dart:ffi';
-import 'dart:ui' as ui;
+import 'dart:ui';
 import 'package:flutter/painting.dart';
 
 import 'package:ffi/ffi.dart';
@@ -35,8 +35,8 @@ Rect getScreenRectForWindow(int handle) {
 
 class GtkWindow extends DesktopWindow {
   int? handle;
-  ui.Size? _minSize;
-  ui.Size? _maxSize;
+  Size? _minSize;
+  Size? _maxSize;
   Alignment? _alignment;
   // size and position are cached during doWhenWindowReady
   // because the window operations for setting size/position
@@ -89,8 +89,8 @@ class GtkWindow extends DesktopWindow {
   }
 
   @override
-  ui.Size get size {
-    if (!isValidHandle(handle, "get size")) return ui.Size.zero;
+  Size get size {
+    if (!isValidHandle(handle, "get size")) return Size.zero;
 
     if (isInsideDoWhenWindowReady == true && _cached.rect != null) {
       return _cached.rect!.size;
@@ -99,20 +99,19 @@ class GtkWindow extends DesktopWindow {
     Pointer<Int32> nativeResult = malloc.allocate(sizeOf<Int32>() * 2);
     native.getSize(
         handle!, nativeResult.elementAt(0), nativeResult.elementAt(1));
-    ui.Size result =
-        ui.Size(nativeResult[0].toDouble(), nativeResult[1].toDouble());
+    Size result = Size(nativeResult[0].toDouble(), nativeResult[1].toDouble());
     malloc.free(nativeResult);
     final gotSize = getLogicalSize(result);
     return gotSize;
   }
 
-  ui.Size get sizeOnScreen {
+  Size get sizeOnScreen {
     if (isInsideDoWhenWindowReady == true && _cached.rect != null) {
       final sizeOnScreen = getSizeOnScreen(_cached.rect!.size);
       return sizeOnScreen;
     }
     final winRect = this.rect;
-    return ui.Size(winRect.width, winRect.height);
+    return Size(winRect.width, winRect.height);
   }
 
   @override
@@ -141,24 +140,24 @@ class GtkWindow extends DesktopWindow {
   }
 
   @override
-  ui.Size get titleBarButtonSize {
+  Size get titleBarButtonSize {
     // NOTE: This might be difficult to retrieve from gtk
-    ui.Size result = ui.Size(32, 32);
+    Size result = Size(32, 32);
     return result;
   }
 
-  ui.Size getSizeOnScreen(ui.Size inSize) {
+  Size getSizeOnScreen(Size inSize) {
     double scaleFactor = this.scaleFactor;
     double newWidth = inSize.width * scaleFactor;
     double newHeight = inSize.height * scaleFactor;
-    return ui.Size(newWidth, newHeight);
+    return Size(newWidth, newHeight);
   }
 
-  ui.Size getLogicalSize(ui.Size inSize) {
+  Size getLogicalSize(Size inSize) {
     double scaleFactor = this.scaleFactor;
     double newWidth = inSize.width / scaleFactor;
     double newHeight = inSize.height / scaleFactor;
-    return ui.Size(newWidth, newHeight);
+    return Size(newWidth, newHeight);
   }
 
   @override
@@ -177,7 +176,7 @@ class GtkWindow extends DesktopWindow {
   }
 
   @override
-  set minSize(ui.Size? newSize) {
+  set minSize(Size? newSize) {
     if (!isValidHandle(handle, "set minSize")) return;
 
     _minSize = newSize;
@@ -190,7 +189,7 @@ class GtkWindow extends DesktopWindow {
   }
 
   @override
-  set maxSize(ui.Size? newSize) {
+  set maxSize(Size? newSize) {
     if (!isValidHandle(handle, "set maxSize")) return;
 
     _maxSize = newSize;
@@ -203,7 +202,7 @@ class GtkWindow extends DesktopWindow {
   }
 
   @override
-  set size(ui.Size newSize) {
+  set size(Size newSize) {
     if (!isValidHandle(handle, "set size")) return;
 
     var width = newSize.width;
@@ -226,7 +225,7 @@ class GtkWindow extends DesktopWindow {
       if (newSize.height > _maxSize!.height) height = _maxSize!.height;
     }
 
-    ui.Size sizeToSet = ui.Size(width, height);
+    Size sizeToSet = Size(width, height);
 
     // Save cached rect
     final double left = _cached.rect != null ? _cached.rect!.left : 0;
