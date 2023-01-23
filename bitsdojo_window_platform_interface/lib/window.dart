@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/painting.dart';
 
 abstract class DesktopWindow {

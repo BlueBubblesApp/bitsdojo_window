@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/painting.dart';
 
 Rect getRectOnScreen(Size sizeOnScreen, Alignment _alignment, Rect screenRect) {

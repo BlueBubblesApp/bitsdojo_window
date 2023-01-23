@@ -5,16 +5,12 @@ import 'package:flutter/widgets.dart';
 import './app_window.dart';
 import './native_api.dart';
 
-T? _ambiguate<T>(T? value) => value;
-
 class BitsdojoWindowMacOS extends BitsdojoWindowPlatform {
   BitsdojoWindowMacOS() : super();
 
   @override
   void doWhenWindowReady(VoidCallback callback) {
-    _ambiguate(WidgetsBinding.instance)!
-        .waitUntilFirstFrameRasterized
-        .then((value) {
+    WidgetsBinding.instance!.waitUntilFirstFrameRasterized.then((value) {
       setWindowCanBeShown(true);
       setInsideDoWhenWindowReady(true);
       callback();
